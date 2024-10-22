@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_EN", "_EN\_EN.csproj", "{6EF1D51E-8408-474C-8068-1D0081A04300}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BussinesLogic", "BussinesLogic", "{82C48BA7-8252-4DA2-8E59-09AD4A0CA009}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataAcces", "DataAcces", "{20B6706C-B9A2-4DE6-9D13-CE3393A0A8D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Entity", "Entity", "{E982A582-22D5-4A39-B4EE-F5274A64927A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_BL", "_BL\_BL.csproj", "{5954E584-E8D6-4907-AD17-F320D3544FFC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_DA", "_DA\_DA.csproj", "{A781A1FD-4424-40E2-95ED-3E262D8115DF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EcommXignuxAPI", "EcommXignuxAPI\EcommXignuxAPI.csproj", "{E5180EAB-2C10-4ADD-9EEB-29AB98E1DBD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6EF1D51E-8408-474C-8068-1D0081A04300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EF1D51E-8408-474C-8068-1D0081A04300}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EF1D51E-8408-474C-8068-1D0081A04300}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6EF1D51E-8408-474C-8068-1D0081A04300}.Debug|x86.Build.0 = Debug|Any CPU
+		{6EF1D51E-8408-474C-8068-1D0081A04300}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EF1D51E-8408-474C-8068-1D0081A04300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EF1D51E-8408-474C-8068-1D0081A04300}.Release|x86.ActiveCfg = Release|Any CPU
+		{6EF1D51E-8408-474C-8068-1D0081A04300}.Release|x86.Build.0 = Release|Any CPU
+		{5954E584-E8D6-4907-AD17-F320D3544FFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5954E584-E8D6-4907-AD17-F320D3544FFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5954E584-E8D6-4907-AD17-F320D3544FFC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5954E584-E8D6-4907-AD17-F320D3544FFC}.Debug|x86.Build.0 = Debug|Any CPU
+		{5954E584-E8D6-4907-AD17-F320D3544FFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5954E584-E8D6-4907-AD17-F320D3544FFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5954E584-E8D6-4907-AD17-F320D3544FFC}.Release|x86.ActiveCfg = Release|Any CPU
+		{5954E584-E8D6-4907-AD17-F320D3544FFC}.Release|x86.Build.0 = Release|Any CPU
+		{A781A1FD-4424-40E2-95ED-3E262D8115DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A781A1FD-4424-40E2-95ED-3E262D8115DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A781A1FD-4424-40E2-95ED-3E262D8115DF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A781A1FD-4424-40E2-95ED-3E262D8115DF}.Debug|x86.Build.0 = Debug|Any CPU
+		{A781A1FD-4424-40E2-95ED-3E262D8115DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A781A1FD-4424-40E2-95ED-3E262D8115DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A781A1FD-4424-40E2-95ED-3E262D8115DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{A781A1FD-4424-40E2-95ED-3E262D8115DF}.Release|x86.Build.0 = Release|Any CPU
+		{E5180EAB-2C10-4ADD-9EEB-29AB98E1DBD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5180EAB-2C10-4ADD-9EEB-29AB98E1DBD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5180EAB-2C10-4ADD-9EEB-29AB98E1DBD0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E5180EAB-2C10-4ADD-9EEB-29AB98E1DBD0}.Debug|x86.Build.0 = Debug|Any CPU
+		{E5180EAB-2C10-4ADD-9EEB-29AB98E1DBD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5180EAB-2C10-4ADD-9EEB-29AB98E1DBD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5180EAB-2C10-4ADD-9EEB-29AB98E1DBD0}.Release|x86.ActiveCfg = Release|Any CPU
+		{E5180EAB-2C10-4ADD-9EEB-29AB98E1DBD0}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6EF1D51E-8408-474C-8068-1D0081A04300} = {E982A582-22D5-4A39-B4EE-F5274A64927A}
+		{5954E584-E8D6-4907-AD17-F320D3544FFC} = {82C48BA7-8252-4DA2-8E59-09AD4A0CA009}
+		{A781A1FD-4424-40E2-95ED-3E262D8115DF} = {20B6706C-B9A2-4DE6-9D13-CE3393A0A8D7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A1BEA28-B9EF-4F90-A1F7-A1FFF5111F61}
+	EndGlobalSection
+EndGlobal

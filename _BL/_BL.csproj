@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="BL_ChanceOrderStatus.cs" />
+    <Compile Remove="BL_InfoLastMille.cs" />
+    <Compile Remove="BL_Instaleap.cs" />
+    <Compile Remove="BL_Orders.cs" />
+    <Compile Remove="BL_SetOrderLiveStatus.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ServiceModel.Duplex" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.Federation" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="4.10.*" />
+    <PackageReference Include="System.ServiceModel.Security" Version="4.10.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\_DA\_DA.csproj" />
+    <ProjectReference Include="..\_EN\_EN.csproj" />
+  </ItemGroup>
+
+</Project>
