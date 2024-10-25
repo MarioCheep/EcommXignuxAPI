@@ -128,9 +128,7 @@ namespace _DA
             initializeVars();
 
             EN_ApplyCouponResponse oENResponse = new EN_ApplyCouponResponse();
-
             List<EN_ApplyCouponResponse> olstENResponse = new List<EN_ApplyCouponResponse>();
-
 
             try
             {
@@ -189,8 +187,8 @@ namespace _DA
 
         public double CalculateShippingDB(EN_CalculateShipping entidad)
         {
-            List<EN_CalculateShippingResponse> olstENResponse = new List<EN_CalculateShippingResponse>();
-            EN_CalculateShippingResponse oENResponse = new EN_CalculateShippingResponse();
+            List<EN_CalculateShippingResponse> olstResponse = new List<EN_CalculateShippingResponse>();
+            EN_CalculateShippingResponse oResponse = new EN_CalculateShippingResponse();
 
             initializeVars();
 
@@ -206,17 +204,53 @@ namespace _DA
                     //Execute stored procedure and map the returned result to a Customer object  
                     var QueryResult = connection.Query<EN_CalculateShippingResponse>("CalculateShipping", parameters, commandType: CommandType.StoredProcedure);
 
-                    olstENResponse = (List<EN_CalculateShippingResponse>)QueryResult;
+                    olstResponse = (List<EN_CalculateShippingResponse>)QueryResult;
 
-                    oENResponse = olstENResponse[0];
+                    oResponse = olstResponse[0];
 
-                    return oENResponse.ShippingCost;
+                    return oResponse.ShippingCost;
                 }
             }
             catch (Exception ex)
             {
                 //ToDO Implement Log Action
                 return -1.0;
+            }
+        }
+
+        public EN_EstimatedDeliveryResponse GetEstimatedDeliveryDB(EN_EstimatedDelivery entidad)
+        {
+            initializeVars();
+
+            List<EN_EstimatedDeliveryResponse> olstENResponse = new List<EN_EstimatedDeliveryResponse>();
+            EN_EstimatedDeliveryResponse oENResponse = new EN_EstimatedDeliveryResponse();
+
+            try
+            {
+                using (var connection = new SqlConnection(connString))
+                {
+                    //Set up DynamicParameters object to pass parameters  
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("OrderId", entidad.OrderId);
+                    parameters.Add("ProductId", entidad.ProductId);
+
+
+                    //Execute stored procedure and map the returned result to a Customer object  
+                    var QueryResult = connection.Query<EN_EstimatedDeliveryResponse>("EstimatedDelivery", parameters, commandType: CommandType.StoredProcedure);
+
+                    olstENResponse = (List<EN_EstimatedDeliveryResponse>)QueryResult;
+
+                    oENResponse = olstENResponse[0];
+
+                    return oENResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                //ToDO Add LOGDB Exception
+                oENResponse.errorMessage = ex.Message.ToString();
+                oENResponse.status = 400;
+                return oENResponse;
             }
         }
 

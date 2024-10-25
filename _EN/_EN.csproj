@@ -51,6 +51,8 @@
     <Compile Include="Entities\EN_ControlErrors.cs" />
     <Compile Include="Entities\EN_Employee.cs" />
     <Compile Include="Entities\EN_ApplyCoupon.cs" />
+    <Compile Include="Entities\EN_EstimatedDelivery.cs" />
+    <Compile Include="Entities\EN_EstimatedDeliveryResponse.cs" />
     <Compile Include="Entities\EN_PremiumBenefits.cs" />
     <Compile Include="Entities\EN_PremiumBenefitsResponse.cs" />
     <Compile Include="EN_Proxy.cs" />

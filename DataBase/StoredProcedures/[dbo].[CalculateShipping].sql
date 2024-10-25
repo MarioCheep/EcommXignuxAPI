@@ -51,7 +51,7 @@ AS
 					FROM tblStoreCoverage SC WITH(NOLOCK)
 					INNER JOIN tblStores S WITH(NOLOCK) ON (SC.StoreId = S.StoreId)
 					INNER JOIN tblClients C WITH(NOLOCK) ON (SC.PostalCodeCoverage = C.PostalCode)
-					WHERE C.ClientId = 1
+					WHERE C.ClientId = @ClientId
 					ORDER BY SC.Distance ASC
 				) AS X
 			

@@ -2,6 +2,7 @@
 using _EN;
 using _EN.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -146,6 +147,10 @@ namespace EventHubLastMille.Controllers
         /// <remarks>
         ///     Sample **request**:
         ///         Post /api/calculate-shipping/
+        ///          {
+        ///             "ClientId": "1",
+        ///             "ProductId": "1",
+        ///         }
         /// </remarks>
         /// <response code="200">Success</response>
         /// <response code="201">Create a tag in the system</response>
@@ -157,18 +162,87 @@ namespace EventHubLastMille.Controllers
         [HttpPost("calculate-shipping/")]
         public double CalculateShipping([FromBody] EN_CalculateShipping entityReq = default, [FromQuery] EN_CalculateShipping entityReqParam = default)
         {
+
             if (ModelState.IsValid)
             {
                 BL_ECommXignux oBLogic = new BL_ECommXignux();
+                EN_Response GetStockResponse = new EN_Response();
+                bool bStockAvailable = false;
+                double dblShippingCost = 0;
 
-                return oBLogic.CalculateShipping(entityReqParam);
+                EN_CalculateShipping CalculateShippingRequest = new EN_CalculateShipping();
+
+                if (entityReq != null)
+                    CalculateShippingRequest = entityReq;
+                else
+                    CalculateShippingRequest = entityReqParam;
+
+                GetStockResponse = oBLogic.GetProductStock(CalculateShippingRequest.ProductId);
+
+                bStockAvailable = (GetStockResponse.status == 0 ? false : true);
+
+                //Validate Stock
+                if (bStockAvailable)
+                    dblShippingCost = oBLogic.CalculateShipping(CalculateShippingRequest);
+
+                return dblShippingCost;
             }
             else
             {
                 //ToDO Implement Log Action
-                return -3.0;
+                return -4;
             }
         }
+
+        /// <summary>
+        /// Estimated Delivery
+        /// </summary>
+        /// <remarks>
+        ///     Sample **request**:
+        ///     
+        ///         Get /api/estimated-delivery
+        ///         {
+        ///             "OrderId": "1",
+        ///             "ProductId": "1",
+        ///         }
+        /// </remarks>
+        /// <param name="entityReq"></param>
+        /// <param name="entityReqParam"></param>
+        /// <response code="200">Success</response>
+        /// <response code="201">Create a tag in the system</response>
+        /// <response code="400">Unable to create tag due to validation error</response>
+        /// <response code="401">Error: Unauthorized | Token no Found or Fail</response>
+        /// 
+        ///[Authorize]
+        [Produces(contentType: "application/json")]
+        [HttpGet("estimated-delivery")]
+        public IActionResult estimatedDelivery([FromBody] EN_EstimatedDelivery entityReq = default, [FromQuery] EN_EstimatedDelivery entityReqParam = default)
+        {
+            EN_EstimatedDeliveryResponse oEResponse = new EN_EstimatedDeliveryResponse();
+
+            if (ModelState.IsValid)
+            {
+                BL_ECommXignux oBLogic = new BL_ECommXignux();
+
+                if (entityReq != null)
+                {
+                    oEResponse = oBLogic.GetEstimatedDelivery(entityReq);
+                }
+                else
+                {
+                    oEResponse = oBLogic.GetEstimatedDelivery(entityReqParam);
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+
+            var json = JsonConvert.SerializeObject(oEResponse, Formatting.None);
+
+            return Created("~api/ECommXignux/estimated-delivery", json);
+        }
+
 
         //// POST api/<ValuesController>
         //[HttpPost]

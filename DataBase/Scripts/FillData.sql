@@ -11,7 +11,7 @@ GO
 
 --Select * From tblStores
 INSERT INTO tblStores (StoreName, PostalCode, DateCreated, UserIdCreated) VALUES ('STORE ONE', '66266', GETDATE(), 1)
-INSERT INTO tblStores (StoreName, PostalCode, DateCreated, UserIdCreated) VALUES ('STORE TWO', '66000',GETDATE(), 1)
+INSERT INTO tblStores (StoreName, PostalCode, DateCreated, UserIdCreated) VALUES ('STORE TWO', '66000', GETDATE(), 1)
 GO
 
 
@@ -86,11 +86,20 @@ INSERT INTO tblProductDetails (ProductId, DimensionsCatalogId, WeightCatalogId) 
 INSERT INTO tblProductDetails (ProductId, DimensionsCatalogId, WeightCatalogId) VALUES (3, 3, 3)
 
 
-SELECT * FROM tblStores
---Select * From tblStoreCoverage
-INSERT INTO tblStoreCoverage(StoreId, PostalCodeCoverage, Distance, CostIncrement, DateCreated, UserIdCreated)
-	VALUES (1, '66266', 1, 2.3, GetDate(), 1)
-INSERT INTO tblStoreCoverage(StoreId, PostalCodeCoverage, Distance, CostIncrement, DateCreated, UserIdCreated)
-	VALUES (1, '66000', 5, 4.6, GetDate(), 1)
-INSERT INTO tblStoreCoverage(StoreId, PostalCodeCoverage, Distance, CostIncrement, DateCreated, UserIdCreated)
-	VALUES (2, '64780', 3, 2, GetDate(), 1)
+--Select * From tblStoreCoverage Order By PostalCodeCoverage
+INSERT INTO tblStoreCoverage(StoreId, PostalCodeCoverage, Distance, AvgDeliveryTime, MaxDeliveryTime, CostIncrement, DateCreated, UserIdCreated)
+	VALUES (1, '66266', 1, 20, 28, 2.3, GetDate(), 1)
+INSERT INTO tblStoreCoverage(StoreId, PostalCodeCoverage, Distance, AvgDeliveryTime, MaxDeliveryTime, CostIncrement, DateCreated, UserIdCreated)
+	VALUES (1, '66000', 5, 60, 85, 4.6, GetDate(), 1)
+INSERT INTO tblStoreCoverage(StoreId, PostalCodeCoverage, Distance, AvgDeliveryTime, MaxDeliveryTime, CostIncrement, DateCreated, UserIdCreated)
+	VALUES (2, '64780', 3, 30, 40, 2, GetDate(), 1)
+-------NOTE: Add The Same Client PostalCode in Other Store (To Validate)
+INSERT INTO tblStoreCoverage(StoreId, PostalCodeCoverage, Distance, AvgDeliveryTime, MaxDeliveryTime, CostIncrement, DateCreated, UserIdCreated)
+	VALUES (2, '66266', 3, 30, 45, 2, GetDate(), 1)
+
+--Select * From tblOrders
+INSERT INTO tblOrders (OrderId, ProductId, ClientId, StoreId, PreparationTime, InternationalOrder, DateCreated, UserIdCreated)
+	VALUES (1, 1, 1, 1, 10, 0, GetDate(), 1)
+INSERT INTO tblOrders (OrderId, ProductId, ClientId, StoreId, PreparationTime, InternationalOrder, DateCreated, UserIdCreated)
+	VALUES (1, 2, 1, 1, 8, 1, GetDate(), 1)
+

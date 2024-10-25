@@ -99,29 +99,14 @@ namespace _BL
 
         public double CalculateShipping(EN_CalculateShipping entidad)
         {
-
             DA_XignuxDB oData = new DA_XignuxDB();
-            EN_Response response = new EN_Response();
-            EN_Response responseValidate = new EN_Response();
 
             try
             {
-                //if (ValidateData_GetStock(productId, ref responseValidate))
-                //{
-
-                //var myRequest = JsonConvert.SerializeObject(entidad);
-                //oBLogEvent.SaveLogDB(Decimal.Parse(entidad.Id_Transaccion.Replace("Xignux", "")), "GetStock", LogDBModule, "RequestData", DateTime.Now, DateTime.Now, 0, myRequest, string.Empty);
-
-                return oData.CalculateShippingDB(entidad);
-                //}
-                //else
-                //{
-                //    response = responseValidate;
-                //}
-
-                //requestErrors(oData);
-                //var myResponse = JsonConvert.SerializeObject(response);
-                //oBLogEvent.SaveLogDB(Decimal.Parse(entidad.Id_Transaccion.Replace("Xignux", "")), "GetStock", LogDBModule, "ResponseData", DateTime.Now, DateTime.Now, 0, myResponse, string.Empty);
+                if (ValidateDataCalculateShipping(entidad))
+                    return oData.CalculateShippingDB(entidad);
+                else
+                    return -3;
             }
             catch (Exception ex)
             {
@@ -129,7 +114,33 @@ namespace _BL
                 return -2.0;
             }
         }
-            
+
+        public EN_EstimatedDeliveryResponse GetEstimatedDelivery(EN_EstimatedDelivery entidad)
+        {
+
+            DA_XignuxDB oData = new DA_XignuxDB();
+            EN_EstimatedDeliveryResponse oENResponse = new EN_EstimatedDeliveryResponse();
+
+            if (entidad.OrderId != 0 || entidad.ProductId != 0)
+            {
+
+                var myRequest = JsonConvert.SerializeObject(entidad);
+                //oBLogEvent.SaveLogDB(Decimal.Parse(entidad.Id_Transaccion.Replace("Xignux", "")), "GetStock", LogDBModule, "RequestData", DateTime.Now, DateTime.Now, 0, myRequest, string.Empty);
+
+                oENResponse = oData.GetEstimatedDeliveryDB(entidad);
+            }
+            else
+            {
+                oENResponse.errorMessage = "400";
+                oENResponse.errorMessage = "Datos Incorrectos";
+            }
+
+            var myResponse = JsonConvert.SerializeObject(oENResponse);
+            //oBLogEvent.SaveLogDB(Decimal.Parse(entidad.Id_Transaccion.Replace("Xignux", "")), "GetStock", LogDBModule, "ResponseData", DateTime.Now, DateTime.Now, 0, myResponse, string.Empty);
+
+            return oENResponse;
+        }
+
         private bool ValidateData_GetStock(int productId, ref EN_Response response)
         {
             if (productId != 0)
@@ -152,7 +163,6 @@ namespace _BL
             }
             return true;
         }
-
         private bool ValidateData_Coupon(EN_ApplyCoupon entidad, ref EN_Response response)
         {
             if (entidad != null)
@@ -175,7 +185,6 @@ namespace _BL
             }
             return true;
         }
-
         private bool ValidateData_GetBenefistByClient(int clientId, ref EN_PremiumBenefitsResponse response)
         {
             if (clientId == 0)
@@ -186,7 +195,22 @@ namespace _BL
             }
             return true;
         }
-
+        private bool ValidateDataCalculateShipping(EN_CalculateShipping entidad) {
+            try
+            {
+                if (entidad.ClientId == 0 || entidad.ProductId == 0)
+                {
+                    return false;
+                }
+                else
+                    return true;
+            }
+            catch (Exception ex)
+            {   
+                //toDO - Register exception in LogEvent
+                return false;
+            }
+        }
         private void requestErrors(DA_XignuxDB oData)
         {
             _error = oData._error;
