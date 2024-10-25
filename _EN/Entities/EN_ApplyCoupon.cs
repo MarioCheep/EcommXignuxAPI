@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace _EN.Entities
 {
-    public class EN_ProductStock : EN_ErrorDesciptionDb
+    public class EN_ApplyCoupon
     {
-        public int ProductId { get; set; }
+        public string couponCode { get; set; }
     }
 }

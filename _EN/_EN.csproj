@@ -45,9 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\EN_ApplyCouponResponse.cs" />
+    <Compile Include="Entities\EN_CalculateShipping.cs" />
+    <Compile Include="Entities\EN_CalculateShippingResponse.cs" />
     <Compile Include="Entities\EN_ControlErrors.cs" />
     <Compile Include="Entities\EN_Employee.cs" />
-    <Compile Include="Entities\EN_ProductStock.cs" />
+    <Compile Include="Entities\EN_ApplyCoupon.cs" />
+    <Compile Include="Entities\EN_PremiumBenefits.cs" />
+    <Compile Include="Entities\EN_PremiumBenefitsResponse.cs" />
     <Compile Include="EN_Proxy.cs" />
     <Compile Include="Interface\InterfaceCatalogs.cs" />
     <Compile Include="Interface\InterfaceErrors.cs" />

@@ -1,7 +1,15 @@
 ﻿using _EN;
 using _EN.Entities;
+using Azure;
+using Dapper;
 using Microsoft.Data.SqlClient;
+using Microsoft.Win32;
+using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
+using System.Net;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace _DA
 {
@@ -11,43 +19,34 @@ namespace _DA
         public bool _valError = false;
         public string _error = string.Empty;
         public string _errorStoreProcedure = string.Empty;
-        private const string connString = "\"Data Source=.;Initial Catalog=PRMAC;User Id=PayRollsa;Password=PayRoll20*\" providerName=\"System.Data.SqlClient\"";
 
         private int _ProductId { get; set; }
 
-        public List<EN_Response> GetProductStockDB(EN_ProductStock entidad)
+        private string connString {  get; set; }
+
+
+        //Constructor
+        public DA_XignuxDB()
         {
-            initialiceVars();
+            try
+            {
+                connString = GetConnString();
+
+            }
+            catch (Exception ex)
+            {
+                //toDo Register in Log DataBase
+            }
+        }
+
+        public List<EN_Response> GetProductStockDB(EN_ApplyCoupon entidad)
+        {
+            initializeVars();
 
             List<EN_Response> GetStock = new List<EN_Response>();
-            GetStock = GetStockData(entidad);
+            //GetStock = GetStockData(entidad);
 
             var L = new List<EN_Response>();
-            //OracleParameter[] parametros = {
-            //    new OracleParameter(":P_TIPOPEDIDO", 2),
-            //    new OracleParameter(":P_IDPEDIDOESTATUS", entidad.Estatus),
-            //    new OracleParameter(":P_IDPEDIDO", entidad.Id_Transaccion),
-            //    new OracleParameter(":P_IDESTATUSOBS", _IdEstatusOBS),
-            //    new OracleParameter(":P_COMENTARIOS", OracleDbType.Varchar2, OracleString.Null, ParameterDirection.InputOutput),
-            //    new OracleParameter(":P_FECHASTATUS", OracleDate.GetSysDate()),
-            //    new OracleParameter(":P_ORIGENESTATUS", 2),
-            //    new OracleParameter(":P_CIA", _Cia),
-            //    new OracleParameter(":P_SUC", _Suc),
-            //    new OracleParameter(":P_CAJAWS", 1),
-            //    new OracleParameter(":P_IDEMPLEADOWS", 1),
-            //    new OracleParameter(":P_FECHAMODSUCWS", OracleDate.GetSysDate()),
-            //    new OracleParameter(":P_HORAMODSUCWS", OracleDate.GetSysDate()),
-            //    new OracleParameter(":P_NOMBREREPARTIDORWS", entidad.Nombre_Operador),
-            //    new OracleParameter(":P_IDREPARTIDORWS", OracleDecimal.Zero),
-            //    new OracleParameter(":P_IDTICKETWS", OracleDecimal.Zero),
-            //    new OracleParameter(":P_DATOSEXRASWS", entidad.Live_Status),
-            //    new OracleParameter(":P_IDUSUARIOCREATE", "Admin"),
-            //    new OracleParameter(":P_FECHACREATE",OracleDate.GetSysDate()),
-            //    new OracleParameter(":P_IDESTATUSENTREGADO", OracleDecimal.Null),
-            //    new OracleParameter(":P_IDUSUARIOCANCELACION",OracleString.Null),
-            //    new OracleParameter(":T_CURSOR", OracleDbType.RefCursor, ParameterDirection.Output)
-            //};
-
 
             try
             {
@@ -78,49 +77,150 @@ namespace _DA
             return L;
         }
 
-        public List<EN_Response> GetProductStockDB(EN_ProductStock entidad, bool bDapper)
+        public EN_Response GetProductStockDB(int productId, bool bDapper)
         {
-            initialiceVars();
+            initializeVars();
 
-            List<EN_Response> GetStock = new List<EN_Response>();
-            //GetStock = GetStockData(entidad);
-
-            var L = new List<EN_Response>();
-
+            EN_Response oResponse = new EN_Response();
             try
             {
+                //var sql = "SELECT IdUsuario FROM Usuarios";
+                ////var products = new List<Product>();
+                //using (var connection = new SqlConnection(connString))
+                //{
+                //    connection.Open();
+                //    using (var command = new SqlCommand(sql, connection))
+                //    {
+                //        using (var reader = command.ExecuteReader())
+                //        {
+                //            while (reader.Read())
+                //            {
+                //                //Console.WriteLine(String.Format("{0}, {1}", reader[0], reader[1]));
+                //                string result = String.Format("{0}", reader[0]);
+                //            }
 
-                var sql = "SELECT Count(IdProduct) FROM Products";
-                //var products = new List<Product>();
+                //            // Call Close when done reading.
+                //            reader.Close();
+                //        }
+                //    }
+                //}
+
                 using (var connection = new SqlConnection(connString))
                 {
                     connection.Open();
-                    using (var command = new SqlCommand(sql, connection))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                           
-                        }
-                    }
-                }
 
-                DataTable dt = null;
-
-                if (dt.Rows.Count > 0)
-                {
-                    //toDo Something
+                    var parameters = new DynamicParameters();
+                    parameters.Add("@productId", productId);
+                    parameters.Add("@RESULT", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                    var RS = connection.Execute("GETProductStock", parameters, null, null, commandType: CommandType.StoredProcedure);
+                    oResponse.status = parameters.Get<int>("@RESULT");
                 }
             }
             catch (Exception ex)
             {
-                L.Add(new EN_Response
+                oResponse.errorMessage = ex.ToString();
+            }
+            return oResponse;
+        }
+
+        public List<EN_ApplyCouponResponse> GetCouponApplicableDB(EN_ApplyCoupon entidad)
+        {
+            initializeVars();
+
+            EN_ApplyCouponResponse oENResponse = new EN_ApplyCouponResponse();
+
+            List<EN_ApplyCouponResponse> olstENResponse = new List<EN_ApplyCouponResponse>();
+
+
+            try
+            {
+                using (var connection = new SqlConnection(connString))
+                {
+                    //Set up DynamicParameters object to pass parameters  
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("CouponCode", entidad.couponCode);
+
+                    //Execute stored procedure and map the returned result to a Customer object  
+                    var QueryResult = connection.Query<EN_ApplyCouponResponse>("GETCouponDiscount", parameters, commandType: CommandType.StoredProcedure);
+
+                    olstENResponse = (List<EN_ApplyCouponResponse>)QueryResult;
+
+                    //oENResponse = olstENResponse[0];
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //ToDO Add LOGDB Exception 
+            }
+            return olstENResponse;
+        }
+
+        public List<EN_PremiumBenefitsResponse> GetPremiumBenefitsDB(int clientId)
+        {
+
+            List<EN_PremiumBenefitsResponse> olstENResponse = new List<EN_PremiumBenefitsResponse>();
+            initializeVars();
+
+            try
+            {
+                using (var connection = new SqlConnection(connString))
+                {
+                    //Set up DynamicParameters object to pass parameters  
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("ClientId", clientId);
+
+                    //Execute stored procedure and map the returned result to a Customer object  
+                    var QueryResult = connection.Query<EN_PremiumBenefitsResponse>("GETPremiumBenefits", parameters, commandType: CommandType.StoredProcedure);
+
+                    olstENResponse = (List<EN_PremiumBenefitsResponse>)QueryResult;
+                }
+            }
+            catch (Exception ex)
+            {
+                olstENResponse.Add(new EN_PremiumBenefitsResponse
                 {
                     errorMessage = ex.ToString()
                 });
             }
-            return L;
+
+            return olstENResponse;
         }
-        private void initialiceVars()
+
+        public double CalculateShippingDB(EN_CalculateShipping entidad)
+        {
+            List<EN_CalculateShippingResponse> olstENResponse = new List<EN_CalculateShippingResponse>();
+            EN_CalculateShippingResponse oENResponse = new EN_CalculateShippingResponse();
+
+            initializeVars();
+
+            try
+            {
+                using (var connection = new SqlConnection(connString))
+                {
+                    //Set up DynamicParameters object to pass parameters  
+                    DynamicParameters parameters = new DynamicParameters();
+                    parameters.Add("ClientId", entidad.ClientId);
+                    parameters.Add("ProductId", entidad.ProductId);
+
+                    //Execute stored procedure and map the returned result to a Customer object  
+                    var QueryResult = connection.Query<EN_CalculateShippingResponse>("CalculateShipping", parameters, commandType: CommandType.StoredProcedure);
+
+                    olstENResponse = (List<EN_CalculateShippingResponse>)QueryResult;
+
+                    oENResponse = olstENResponse[0];
+
+                    return oENResponse.ShippingCost;
+                }
+            }
+            catch (Exception ex)
+            {
+                //ToDO Implement Log Action
+                return -1.0;
+            }
+        }
+
+        private void initializeVars()
         {
             _error = string.Empty;
             _errorConexion = false;
@@ -128,9 +228,37 @@ namespace _DA
             _errorStoreProcedure = string.Empty;
         }
 
-        private List<EN_Response> GetStockData(EN_ProductStock entidad)
+        private string GetConnString()
         {
-            initialiceVars();
+            string KeyString = string.Empty;
+
+            try
+            {
+                RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Xignux\\");
+                if (key != null)
+                {
+
+                    KeyString = key.GetValue("connString").ToString();
+                    //if (KeyString == null)
+                    //{
+                    //   ToDo //Add to Log DataBase
+                    //} 
+                }
+                else
+                    throw new Exception("Llave de conexión no encontrada");
+
+                return KeyString;
+            }
+            catch (Exception ex)
+            {
+                //toDo Add Log Event
+                return ex.Message.ToString();
+            }
+        }
+
+        private List<EN_Response> GetStockData(EN_ApplyCoupon entidad)
+        {
+            initializeVars();
 
             var L = new List<EN_Response>();
 
